@@ -1,0 +1,83 @@
+﻿@using Newtonsoft.Json;
+@model IEnumerable<hungnv_ph30098.Models.CongVien>
+
+@{
+	ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+	<a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Name)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Address)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Type)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.DienTich)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ThoiGianMo)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Status)
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.Name)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Address)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Type)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.DienTich)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ThoiGianMo)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Status)
+				</td>
+				<td>
+					<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+					<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+					<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+					@{
+						List<CongVien> lstCV = new List<CongVien>();
+						var oldjson = @Context.Session.GetString("lstjson");
+						//kiểm tra có phần tử nào ko
+						if (oldjson != null)
+						{
+
+							lstCV = JsonConvert.DeserializeObject<List<CongVien>>(oldjson);
+							//kiểm tra cái mới sửa đã có chưa
+							var jsonValid = lstCV.FirstOrDefault(p => p.Id == item.Id);
+							if (jsonValid != null)
+							{
+								<a asp-action="Rollback" asp-route-id="@item.Id">| Rollback</a>
+							}
+						}
+					}
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
