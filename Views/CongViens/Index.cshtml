@@ -10,6 +10,12 @@
 <p>
 	<a asp-action="Create">Create New</a>
 </p>
+@{
+	if (Context.Session.GetString("xoa") != null)
+	{
+		<a asp-action="Rollback_de">Hoàn tác xoá</a>
+	}
+}
 <table class="table">
 	<thead>
 		<tr>

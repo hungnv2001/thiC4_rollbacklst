@@ -149,9 +149,6 @@ namespace hungnv_ph30098.Controllers
 
         public async Task<IActionResult> Rollback(Guid id)
         {
-
-
-
             try
             {
                 var lstjson = HttpContext.Session.GetString("lstjson");
@@ -171,8 +168,26 @@ namespace hungnv_ph30098.Controllers
 
             return View();
         }
-        // GET: CongViens/Delete/5
-        public async Task<IActionResult> Delete(Guid id)
+		public async Task<IActionResult> Rollback_de(Guid id)
+		{
+			try
+			{
+				var lstjson = HttpContext.Session.GetString("xoa");
+				var congVien= JsonConvert.DeserializeObject<CongVien>(lstjson);
+				dt.Create(congVien);
+				HttpContext.Session.Remove("xoa");
+
+			}
+			catch (DbUpdateConcurrencyException)
+			{
+
+			}
+			return RedirectToAction(nameof(Index));
+
+			
+		}
+		// GET: CongViens/Delete/5
+		public async Task<IActionResult> Delete(Guid id)
         {
             if (id == null || dt.GetAll() == null)
             {
@@ -200,6 +215,8 @@ namespace hungnv_ph30098.Controllers
             var congVien = dt.Find(id);
             if (congVien != null)
             {
+                var xoajson= JsonConvert.SerializeObject(congVien);
+                HttpContext.Session.SetString("xoa", xoajson);
                 dt.Delete(id);
             }
 
